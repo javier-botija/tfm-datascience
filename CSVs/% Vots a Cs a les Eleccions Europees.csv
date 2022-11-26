@@ -1,0 +1,87 @@
+"BA";"Nombre";"DT";"DTBA";"Indicador";"Valor 2019"
+1;"la Seu";1;11;122;15,85
+2;"la Xerea";1;12;122;17,9
+3;"el Carme";1;13;122;12,5
+4;"el Pilar";1;14;122;13,93
+5;"el Mercat";1;15;122;14,6
+6;"Sant Francesc";1;16;122;18,39
+7;"Russafa";2;21;122;16,67
+8;"el Pla del Remei";2;22;122;20,27
+9;"Gran Via";2;23;122;21,18
+10;"el Botànic";3;31;122;16,02
+11;"la Roqueta";3;32;122;17,22
+12;"la Petxina";3;33;122;18,23
+13;"Arrancapins";3;34;122;18,52
+14;"Campanar";4;41;122;17,91
+15;"les Tendetes";4;42;122;13,71
+16;"el Calvari";4;43;122;16,52
+17;"Sant Pau";4;44;122;24,8
+18;"Marxalenes";5;51;122;15,11
+19;"Morvedre";5;52;122;15,26
+20;"Trinitat";5;53;122;15,59
+21;"Tormos";5;54;122;17,32
+22;"Sant Antoni";5;55;122;16,95
+23;"Exposició";6;61;122;22,28
+24;"Mestalla";6;62;122;21,33
+25;"Jaume Roig";6;63;122;22,57
+26;"Ciutat Universitària";6;64;122;14,85
+27;"Nou Moles";7;71;122;16,08
+28;"Soternes";7;72;122;17,09
+29;"Tres Forques";7;73;122;14,2
+30;"la Fontsanta";7;74;122;11,29
+31;"la Llum";7;75;122;17,31
+32;"Patraix";8;81;122;17,03
+33;"Sant Isidre";8;82;122;18,02
+34;"Vara de Quart";8;83;122;15,67
+35;"Safranar";8;84;122;18,54
+36;"Favara";8;85;122;17,02
+37;"la Raiosa";9;91;122;17,49
+38;"l'Hort de Senabre";9;92;122;16,23
+39;"la Creu Coberta";9;93;122;17,04
+41;"Camí Real";9;95;122;18,19
+42;"Mont-Olivet";10;101;122;16,75
+43;"en Corts";10;102;122;15,34
+44;"Malilla";10;103;122;18,21
+45;"Fonteta de Sant Lluís";10;104;122;19,66
+46;"na Rovella";10;105;122;14,54
+47;"la Punta";10;106;122;18,54
+48;"Ciutat de les Arts i les Ciències";10;107;122;26,1
+49;"el Grau";11;111;122;15,54
+50;"el Cabanyal-el Canyamelar";11;112;122;14,67
+51;"la Malva-rosa";11;113;122;14,22
+52;"Beteró";11;114;122;15,45
+53;"Natzaret";11;115;122;14,09
+54;"Aiora";12;121;122;14,9
+55;"Albors";12;122;122;16,17
+56;"la Creu del Grau";12;123;122;16,27
+57;"Camí Fondo";12;124;122;17,28
+58;"Penya-roja";12;125;122;28,13
+59;"l'Illa Perduda";13;131;122;15,02
+60;"Ciutat Jardí";13;132;122;15,72
+61;"l'Amistat";13;133;122;15,49
+62;"la Bega Baixa";13;134;122;17,41
+63;"la Carrasca";13;135;122;18,81
+64;"Benimaclet";14;141;122;15,44
+65;"Camí de Vera";14;142;122;15,94
+66;"Orriols";15;151;122;12,84
+67;"Torrefiel";15;152;122;16,14
+68;"Sant Llorenç";15;153;122;23,49
+69;"Benicalap";16;161;122;17,79
+70;"Ciutat Fallera";16;162;122;14,42
+71;"Benifaraig";17;171;122;16,26
+72;"Poble Nou";17;172;122;11,57
+73;"Carpesa";17;173;122;10,78
+74;"Cases de Bàrcena";17;174;122;14,05
+75;"Mauella";17;175;122;14,05
+76;"Massarrojos";17;176;122;19
+77;"Borbotó";17;177;122;13,96
+78;"Benimàmet";18;181;122;14,94
+79;"Beniferri";18;182;122;24,26
+80;"el Forn d'Alcedo";19;191;122;14,92
+81;"el Castellar-l'Oliverar";19;192;122;19,7
+82;"Pinedo";19;193;122;17,52
+83;"el Saler";19;194;122;17,33
+84;"el Palmar";19;195;122;13,14
+85;"el Perellonet";19;196;122;18,91
+86;"la Torre";19;197;122;16,29
+87;"Faitanar";19;198;122;16,29
