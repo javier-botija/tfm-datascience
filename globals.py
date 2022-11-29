@@ -1,0 +1,5 @@
+pathCSVs = './CSVs/'
+pathoCSVs = './oCSVs/'
+pathData = './data/'
+fileBarrios = 'barris-barrios.geojson'
+fileIndicadores = 'indicadores.csv'
