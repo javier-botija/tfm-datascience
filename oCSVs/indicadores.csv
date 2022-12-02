@@ -30,7 +30,7 @@
 29;Población;Estructura de la población;Distribución porcentual de población de nacionalidad extranjera de América del Norte;Distribuci√≥ percentual de poblaci√≥ de nacionalitat estrangera d'Am√®rica del Nord
 30;Población;Estructura de la población;Distribución porcentual de población de nacionalidad extranjera de América Central;Distribuci√≥ percentual de poblaci√≥ de nacionalitat estrangera d'Am√®rica Central
 31;Población;Estructura de la población;Distribución porcentual de población de nacionalidad extranjera de América del Sur;Distribuci√≥ percentual de poblaci√≥ de nacionalitat estrangera d'Am√®rica del Sud
-32;Población;Estructura de la población;Distribución porcentual de población de nacionalidad extranjera de Asia, Oceanía o apátrida;Distribuci√≥ percentual de poblaci√≥ de nacionalitat estrangera d'√Äsia, Oceania o ap√†trida
+32;Población;Estructura de la población;Distribución porcentual de población de nacionalidad extranjera de Asia Oceanía o apátrida;Distribuci√≥ percentual de poblaci√≥ de nacionalitat estrangera d'√Äsia, Oceania o ap√†trida
 33;Población;Estructura de la población;Índice de autoctonía;√çndex d'autoctonia
 34;Población;Estructura de la población;Índice de autoctonía provincial;√çndex d'autoctonia provincial
 35;Población;Estructura de la población;Índice de autoctonía Comunidad Valenciana;√çndex d'autoctonia Comunitat Valenciana
@@ -94,9 +94,9 @@
 93;Edificación y Vivienda;Vivienda;Superficie total de aparcamientos;Superf√≠cie total d'aparcaments
 94;Edificación y Vivienda;Vivienda;Superficie de aparcamiento por vivienda;Superf√≠cie d'aparcament per habitatge
 95;Edificación y Vivienda;Vivienda;Superficie de aparcamiento por turismo;Superf√≠cie d'aparcament per turisme
-96;Actividad Económica, Renta y Consumo;Actividad Económica;Actividades en el Impuesto de Actividades Económicas;Activitats a l'Impost d'Activitats Econ√≤miques
-97;Actividad Económica, Renta y Consumo;Actividad Económica;Grado de terciarización económica;Grau de terciaritzaci√≥ econ√≤mica
-98;Actividad Económica, Renta y Consumo;Actividad Económica;Actividades económicas por 1.000 habitantes;Activitats econ√≤miques per 1.000 habitants
+96;Actividad Económica Renta y Consumo;Actividad Económica;Actividades en el Impuesto de Actividades Económicas;Activitats a l'Impost d'Activitats Econ√≤miques
+97;Actividad Económica Renta y Consumo;Actividad Económica;Grado de terciarización económica;Grau de terciaritzaci√≥ econ√≤mica
+98;Actividad Económica Renta y Consumo;Actividad Económica;Actividades económicas por 1.000 habitantes;Activitats econ√≤miques per 1.000 habitants
 101;Participación Ciudadana;Consultas Electorales;% Participación en las Elecciones Locales;% Participaci√≥ a les Eleccions Locals
 102;Participación Ciudadana;Consultas Electorales;% Votos a Compromís en las Elecciones Locales;% Vots a Comprom√≠s a les Eleccions Locals
 103;Participación Ciudadana;Consultas Electorales;% Votos en el PP en las Elecciones Locales;% Vots al PP a les Eleccions Locals
