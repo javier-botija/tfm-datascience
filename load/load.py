@@ -6,7 +6,7 @@ import globals as gb
 
 
 def damefecha(mrow):
-    mfechastr = "01/01/" + str(mrow.Year)
+    mfechastr = "01/01/" + str(int(mrow.Year))
     mfecha = pd.to_datetime(mfechastr)
     return mfecha
 
@@ -25,13 +25,24 @@ def recorre_ficheros_indices():
 def recorre_ficheros_econ():
     ficheros = os.listdir(gb.pathCSVsEcon)
     for fich in ficheros:
-        importa_fichero_econs(gb.pathCSVsEcon, fich)
+        if fich[0:7] == 'T0003_C':
+            importa_fichero_econs(gb.pathCSVsEcon, fich)
 
 def recorre_ficheros_airbnb():
     importa_fichero_airbnb(gb.pathCSVsAirbnb + gb.filebnb2018, 2018)
     importa_fichero_airbnb(gb.pathCSVsAirbnb + gb.filebnb2019, 2019)
     importa_fichero_airbnb(gb.pathCSVsAirbnb + gb.filebnb2021, 2021)
     importa_fichero_airbnb(gb.pathCSVsAirbnb + gb.filebnb2022, 2022)
+
+def recorre_ficheros_pisos_turisticos():
+    importa_fichero_pisosturisticos(gb.pathCSVsAirbnb + gb.filepisosturisticos, 4, 2018)
+
+
+def recorre_ficheros_renta():
+    ficheros = os.listdir(gb.pathCSVsRenta)
+    for fich in ficheros:
+        if fich[0:6] == 'Barris':
+            importa_fichero_renta(gb.pathCSVsRenta, fich)
 
 
 def importa_fichero_indices(directorio, fich):
@@ -42,7 +53,6 @@ def importa_fichero_indices(directorio, fich):
             df_dest = df_dest.append({'DT': row['DT'],
                                       'DTBA': row['DTBA'],
                                       'Indicator': row['Indicador'],
-                                      'Description': fich.replace('.csv',''),
                                       'Year': column.replace('Valor ', ''),
                                       'Value': row[column]}, ignore_index=True)
 
@@ -65,33 +75,14 @@ def importa_fichero_econs(directorio, fich):
             df_dest = df_dest.append({'DT': row['Distrito'],
                                       'DTBA': DTBA,
                                       'Indicator': 200,
-                                      'Description': 'Total Servicios',
                                       'Year': Yearfich,
                                       'Value': ValueTot}, ignore_index=True)
-            df_dest = df_dest.append({'DT': row['Distrito'],
-                                      'DTBA': DTBA,
-                                      'Indicator': 201,
-                                      'Description': 'Comercio, restaurantes, hostelería y reparaciones',
-                                      'Year': Yearfich,
-                                      'Value': row[colini]}, ignore_index=True)
-            df_dest = df_dest.append({'DT': row['Distrito'],
-                                      'DTBA': DTBA,
-                                      'Indicator': 202,
-                                      'Description': 'Transportes y comunicaciones',
-                                      'Year': Yearfich,
-                                      'Value': row[colini+1]}, ignore_index=True)
-            df_dest = df_dest.append({'DT': row['Distrito'],
-                                      'DTBA': DTBA,
-                                      'Indicator': 203,
-                                      'Description': 'Instituciones financieras y seguros',
-                                      'Year': Yearfich,
-                                      'Value': row[colini+2]}, ignore_index=True)
-            df_dest = df_dest.append({'DT': row['Distrito'],
-                                      'DTBA': DTBA,
-                                      'Indicator': 204,
-                                      'Description': 'Otros servicios',
-                                      'Year': Yearfich,
-                                      'Value': row[colini+3]}, ignore_index=True)
+            for col in range(4):
+                df_dest = df_dest.append({'DT': row['Distrito'],
+                                          'DTBA': DTBA,
+                                          'Indicator': 201+col,
+                                          'Year': Yearfich,
+                                          'Value': row[colini+col]}, ignore_index=True)
 
 
 def importa_fichero_airbnb(fich, Yearfich):
@@ -119,13 +110,54 @@ def importa_fichero_airbnb(fich, Yearfich):
         df_dest = df_dest.append({'DT': index[0],
                                   'DTBA': int(index[1]),
                                   'Indicator': 301,
-                                  'Description': 'Número de Airbnb',
                                   'Year': Yearfich,
                                   'Value': row[0]}, ignore_index=True)
 
 
+def importa_fichero_pisosturisticos(fich, years, yearini):
+    global df_dest
+    df_pisos = pd.read_excel(fich, skiprows=range(4))
+
+    for index, row in df_pisos.iterrows():
+        if type(row['Districte']) == str:
+            aux = row['Districte'].split('.')
+            if aux[0].isdigit():
+                DT = aux[0]
+        if type(row['Barri']) == str:
+            if row['Barri'].find('.') > 0:
+                aux = row['Barri'].split('.')
+                DTBA = aux[0] + aux[1]
+                for col in range(years):
+                    num = row[2 + col]
+                    if num > 0:
+                        num = int(num)
+                    else:
+                        num = 0
+                    df_dest = df_dest.append({'DT': DT,
+                                              'DTBA': DTBA,
+                                              'Indicator': 302,
+                                              'Year': yearini+col,
+                                              'Value': int(num)}, ignore_index=True)
+
+
+def importa_fichero_renta(directorio, fich):
+    global df_dest
+    df = pd.read_csv(directorio + fich, sep=';', encoding="ISO-8859-1")
+    Indfich = 400 + int(fich[16:18])
+    for index, row in df.iterrows() :
+        if str(row['DT']) != 'nan':
+            DT = int(row['DT'])
+            DTBA = int(row['DTBA'])
+            Year = int(row['Any'])
+            df_dest = df_dest.append({'DT': DT,
+                                      'DTBA': DTBA,
+                                      'Indicator': Indfich,
+                                      'Year': Year,
+                                      'Value': row['Valor']}, ignore_index=True)
+
+
 def crea_tabla_resumen(fichgeo, fichind):
-    df_data = pd.read_csv(gb.pathData + 'dataraw.csv', sep=';', decimal=',')
+    df_data = pd.read_csv(gb.pathData + gb.fileDataRaw, sep=';', decimal=',')
     df_data['ValueDate'] = df_data.apply(damefecha, axis=1)
 
     df_ind = pd.read_csv(fichind, sep=';')
@@ -151,26 +183,34 @@ def crea_tabla_resumen(fichgeo, fichind):
                                 'last_edited_user',
                                 'last_edited_date'], axis=1)
 
-    gdf_final.to_csv(gb.pathData + 'data_Indices.csv', sep=';', decimal='.', index=False)
-    #gdf_final.to_file(gb.pathData + 'data_' + Tema + '.geojson', driver='GeoJSON')
+    gdf_final.to_csv(gb.pathData + gb.fileData, sep=';', decimal='.', index=False)
+
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-#    df_dest = pd.DataFrame(columns=['DT', 'DTBA', 'Indicator', 'Description', 'Year', 'Value'])
+    df_dest = pd.DataFrame(columns=['DT', 'DTBA', 'Indicator', 'Year', 'Value'])
 
     print('Cargando índices...')
-#    recorre_ficheros_indices()
+    recorre_ficheros_indices()
     print('Índices finalizado')
 
     print('Cargando econs...')
-#    recorre_ficheros_econ()
+    recorre_ficheros_econ()
     print('Econ finalizado')
 
-    print('Cargando índices...')
-#    recorre_ficheros_airbnb()
+    print('Cargando Airbnb...')
+    recorre_ficheros_airbnb()
     print('Airbnb finalizado')
 
-#    df_dest.to_csv(gb.pathData + 'dataraw.csv', sep=';', index=False)
+    print('Cargando Pisos Turísticos...')
+    recorre_ficheros_pisos_turisticos()
+    print('Pisos Turísticos finalizado')
+
+    print('Cargando Renta...')
+    recorre_ficheros_renta()
+    print('Renta finalizado')
+
+    df_dest.to_csv(gb.pathData + gb.fileDataRaw, sep=';', index=False)
 
     print('Creando tabla resumen')
     crea_tabla_resumen(gb.pathCSVsOther + gb.fileBarrios, gb.pathCSVsOther + gb.fileIndicadores)

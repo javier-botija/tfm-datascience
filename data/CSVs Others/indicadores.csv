@@ -127,3 +127,14 @@
 203;Actividad Económica Renta y Consumo;Servicios;Instituciones financieras y seguros;Instituciones financieras y seguros
 204;Actividad Económica Renta y Consumo;Servicios;Otros servicios;Otros servicios
 301;Airbnb;Airbnb;Número de Airbnb;Número de Airbnb
+302;Airbnb;Airbnb;Número de Pisos Turísticos;Número de Pisos Turisticos
+401;Renta;Renta;Renta neta media por persona;Renda neta mitjana per persona
+402;Renta;Renta;Renta neta media por hogar;Renda neta mitjana per llar
+403;Renta;Renta;Media de la renta por unidad de consumo;Mitjana de la renda per unitat de consum
+407;Renta;Renta;Porcentaje de ingresos - Salarios;Percentatge d'ingressos procedents de salaris
+408;Renta;Renta;Porcentaje de ingresos - Pensiones;Percentatge d'ingressos procedents de pensions
+409;Renta;Renta;Porcentaje de ingresos - Desocupación;Percentatge d'ingressos procedents de prestacions per desocupació
+410;Renta;Renta;Porcentaje de ingresos - Incapacidad;Percentatge d'ingressos procedents d'altres prestacions (incapacitat dependència...).
+411;Renta;Renta;Porcentaje de ingresos - Arrendamientos;Percentatge d'ingressos procedents d'altres ingressos (arrendament d'immobles rendiments d'activitats econòmiques)
+474;Renta;Vulnerabilidad;Índice de Gini;Índex de Gini
+475;Renta;Vulnerabilidad;Distribución de la renta P80/P20;Distribució de la renda P80/P20
