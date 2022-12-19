@@ -7,22 +7,34 @@ import cufflinks as cf
 from IPython.display import display,HTML
 
 
-def dame_barrio(mrow):
-    barrio = str(mrow.DTBA) + ' ' + mrow.nombre
-    return barrio
 
 
-def crea_df(Indice):
+
+def crea_df(Indice, Var):
     df_data = pd.read_csv(gb.pathData + gb.fileData, sep=';', decimal=',')
     #df_data = df_data[df_data.DT.isin([11])]
-    df_data['barrio'] = df_data.apply(dame_barrio, axis=1)
+
     df_data = df_data.pivot_table(index='Year', columns='barrio', values=Indice)
+
+    if Var:
+        for col in df_data.columns:
+            barrio = ''
+            for index, row in df_data.iterrows() :
+                if barrio == '':
+                    barrio = col
+                    valorant = row[col]
+                valor = row[col]
+                row[col]= valor - valorant
+                valorant = valor
+
     #df_data = df_data.dropna()
     return df_data
 
 
-def crea_plot(Indice):
-    df_data = crea_df(Indice)
+def crea_plot(Indice, Var = False):
+    df_data = crea_df(Indice, Var)
+    if Var:
+        Indice = Indice + ' (Variación)'
     df_data.iplot(kind='line', xTitle='Year', yTitle=Indice)
 
 
@@ -76,23 +88,29 @@ def dibuja_graficos(Indice):
 if __name__ == '__main__':
     cf.set_config_file(sharing='public', theme='white', offline=True)
     setattr(plotly.offline, "__PLOTLY_OFFLINE_INITIALIZED", True)
+    indices = ['027 Distribución porcentual de población de nacionalidad extranjera Europea no UE',
+               '041 Número medio de personas por unidad familiar',
+               '098 Actividades económicas por 1.000 habitantes',
+               '201 Comercio Restaurantes Hostelería y Reparaciones',
+               '311 Número de Pisos Turísticos',
+               '401 Renta neta media por persona',
+               '474 Índice de Gini',
+               '503 Alquiler medio mensual €/m2'
+               ]
+    indices = ['026 Distribución porcentual de población de nacionalidad extranjera de la Unión Europea',
+               '027 Distribución porcentual de población de nacionalidad extranjera Europea no UE',
+               '028 Distribución porcentual de población de nacionalidad extranjera de África',
+               '029 Distribución porcentual de población de nacionalidad extranjera de América del Norte',
+               '030 Distribución porcentual de población de nacionalidad extranjera de América Central',
+               '031 Distribución porcentual de población de nacionalidad extranjera de América del Sur',
+               '032 Distribución porcentual de población de nacionalidad extranjera de Asia Oceanía o apátrida',
+               '033 Índice de autoctonía',
+               '034 Índice de autoctonía provincial',
+               '035 Índice de autoctonía Comunidad Valenciana',
+               '036 Índice de autoctonía estatal',
+               '037 Índice de aloctonía estatal',
+               '038 Índice de autoctonía UE'
+               ]
 
-
-    #crea_plot('027 Distribución porcentual de población de nacionalidad extranjera Europea no UE')
-    #crea_plot('041 Número medio de personas por unidad familiar')
-    #crea_plot('040 Población de 18 o más años con nivel de estudios de Bachillerato o superior')
-    #crea_plot('090 % Viviendas con valor catastral menor de 18.000 euros')
-    #crea_plot('098 Actividades económicas por 1.000 habitantes')
-    #crea_plot('201 Comercio Restaurantes Hostelería y Reparaciones')
-    crea_plot('301 Número de Airbnb')
-    crea_plot('302 Número de Pisos Turísticos')
-    #crea_plot('401 Renta neta media por persona')
-    #crea_plot('402 Renta neta media por hogar')
-    #crea_plot('403 Media de la renta por unidad de consumo')
-    #crea_plot('407 Porcentaje de ingresos - Salarios')
-    #crea_plot('408 Porcentaje de ingresos - Pensiones')
-    #crea_plot('409 Porcentaje de ingresos - Desocupación')
-    #crea_plot('410 Porcentaje de ingresos - Incapacidad')
-    #crea_plot('411 Porcentaje de ingresos - Arrendamientos')
-    #crea_plot('474 Índice de Gini')
-    #crea_plot('475 Distribución de la renta P80/P20')
+    for indice in indices:
+        crea_plot(indice)

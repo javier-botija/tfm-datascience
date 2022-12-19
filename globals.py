@@ -1,6 +1,7 @@
 pathCSVsIndex = '../data/CSVs Indices/'
 pathCSVsEcon = '../data/CSVs Econ/'
 pathCSVsRenta = '../data/CSVs Renta/'
+pathCSVsAlquileres = '../data/CSVs Alquileres/'
 
 pathCSVsOther = '../data/CSVs Others/'
 fileBarrios = 'barris-barrios.geojson'
@@ -16,3 +17,4 @@ filepisosturisticos = 'Apartamentos Turisticos Evolucion por barrios.xlsx'
 pathData = '../data/'
 fileDataRaw = 'dataraw.csv'
 fileData = 'data_Indices.csv'
+fileDataT = 'data_Indices_Trans.csv'
