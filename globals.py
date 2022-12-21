@@ -17,4 +17,16 @@ filepisosturisticos = 'Apartamentos Turisticos Evolucion por barrios.xlsx'
 pathData = '../data/'
 fileDataRaw = 'dataraw.csv'
 fileData = 'data_Indices.csv'
-fileDataT = 'data_Indices_Trans.csv'
+fileDataTrans = 'data_Indices_Trans.csv'
+fileDataC = 'data_Indices_Cluster.csv'
+fileDataClean = 'data_Indices_Clean.csv'
+
+basics = ['DT', 'DTBA', 'nombre', 'barrio', 'geometry', 'Year', 'ValueDate']
+indexes = ['037 Índice de aloctonía estatal',
+           '042 Porcentaje de unidades familiares unipersonales',
+           '201 Comercio Restaurantes Hostelería y Reparaciones',
+           '311 Número de Pisos Turísticos',
+           '401 Renta neta media por persona',
+           '474 Índice de Gini',
+           '503 Alquiler medio mensual €/m2'
+           ]

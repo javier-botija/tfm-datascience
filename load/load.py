@@ -208,16 +208,16 @@ def importa_fichero_alquileres(directorio, fich):
                                       'Value': row['Valor']}, ignore_index=True)
 
 
-def crea_tabla_resumen(fichgeo, fichind):
+def crea_tabla_resumen():
     df_data = pd.read_csv(gb.pathData + gb.fileDataRaw, sep=';', decimal=',')
     df_data['ValueDate'] = df_data.apply(dame_fecha, axis=1)
 
-    df_ind = pd.read_csv(fichind, sep=';')
+    df_ind = pd.read_csv(gb.pathCSVsOther + gb.fileIndicadores, sep=';')
 
     df_data = df_data.merge(df_ind, left_on='Indicator', right_on='Indicador')
     df_data['IndEsp'] = df_data.apply(dame_esp, axis=1)
 
-    gdf_barrios = gpd.read_file(fichgeo)
+    gdf_barrios = gpd.read_file(gb.pathCSVsOther + gb.fileBarrios)
     gdf_barrios.insert(0, "DTBA", pd.to_numeric(gdf_barrios.coddistbar, downcast='integer'), True)
 
     # Agrupamos los resultados
@@ -239,63 +239,89 @@ def crea_tabla_resumen(fichgeo, fichind):
     gdf_final.to_csv(gb.pathData + gb.fileData, sep=';', decimal='.', index=False)
 
 
-def elimina_otros_indices(origen, destino):
-    df_data = pd.read_csv(origen, sep=';', decimal='.')
-
-    basicos = ['DT', 'DTBA', 'nombre', 'barrio', 'geometry', 'Year', 'ValueDate']
-
-    indices = ['037 Índice de aloctonía estatal',
-               '041 Número medio de personas por unidad familiar',
-               '098 Actividades económicas por 1.000 habitantes',
-               '201 Comercio Restaurantes Hostelería y Reparaciones',
-               '311 Número de Pisos Turísticos',
-               '401 Renta neta media por persona',
-               '474 Índice de Gini',
-               '503 Alquiler medio mensual €/m2'
-               ]
-
+def elimina_otros_indices():
+    df_data = pd.read_csv(gb.pathData + gb.fileData, sep=';', decimal='.')
     for col in df_data.columns:
-            if (col not in basicos) & (col not in indices):
+            if (col not in gb.basics) & (col not in gb.indexes):
                     df_data = df_data.drop(col, axis=1)
+    df_data.to_csv(gb.pathData + gb.fileDataTrans, sep=';', decimal='.', index=False)
 
-    df_data.to_csv(destino, sep=';', decimal='.', index=False)
 
+def dame_valor_prox(mrow):
+    global g_df_data
+    global g_col
+    if str(mrow[g_col]) != 'nan':
+        valor = mrow[g_col]
+    else :
+        dtba = mrow['DTBA']
+        year = mrow['Year']
+        print(dtba, year)
+        #buscamos el anterior
+        nyears = g_df_data[(g_df_data.DTBA == dtba) & (g_df_data.Year < year) & (g_df_data[g_col].isnull() == False)]['Year']
+        nyear = nyears.max()
+        if str(nyear) != 'nan':
+            valor = g_df_data[(g_df_data.DTBA == dtba) & (g_df_data.Year == nyear)][g_col].iloc[0,]
+        else:
+            #buscamos siguiente
+            nyears = g_df_data[(g_df_data.DTBA == dtba) & (g_df_data.Year > year) & (g_df_data[g_col].isnull() == False)]['Year']
+            nyear = nyears.min()
+            if str(nyear) != 'nan':
+                valor = g_df_data[(g_df_data.DTBA == dtba) & (g_df_data.Year == nyear)][g_col].iloc[0,]
+            else:
+                valor = 0
+    return valor
+
+def filtrayrellena():
+    global g_df_data
+    global g_col
+
+    g_df_data = g_df_data[g_df_data.Year >= 2018]
+
+    for col in gb.indexes:
+        g_col = col
+        g_df_data[g_col] = g_df_data.apply(dame_valor_prox, axis=1)
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     #df_dest = pd.DataFrame(columns=['DT', 'DTBA', 'Indicator', 'Year', 'Value'])
 
     print('Cargando índices...')
-    recorre_ficheros_indices()
+#    recorre_ficheros_indices()
     print('Índices finalizado')
 
     print('Cargando econs...')
-    recorre_ficheros_econ()
+#    recorre_ficheros_econ()
     print('Econ finalizado')
 
     print('Cargando Airbnb...')
-    recorre_ficheros_airbnb()
+#    recorre_ficheros_airbnb()
     print('Airbnb finalizado')
 
     print('Cargando Pisos Turísticos...')
-    recorre_ficheros_pisos_turisticos()
+#    recorre_ficheros_pisos_turisticos()
     print('Pisos Turísticos finalizado')
 
     print('Cargando Renta...')
-    recorre_ficheros_renta()
+#    recorre_ficheros_renta()
     print('Renta finalizado')
 
     print('Cargando Alquileres...')
-    recorre_ficheros_alquileres()
+#    recorre_ficheros_alquileres()
     print('Alquileres finalizado')
 
-    df_dest.to_csv(gb.pathData + gb.fileDataRaw, sep=';', index=False)
+#    df_dest.to_csv(gb.pathData + gb.fileDataRaw, sep=';', index=False)
 
     print('Creando tabla resumen...')
-    crea_tabla_resumen(gb.pathCSVsOther + gb.fileBarrios, gb.pathCSVsOther + gb.fileIndicadores)
+    crea_tabla_resumen()
     print('Proceso finalizado')
 
     print('Creando tabla solo indices...')
-    elimina_otros_indices(gb.pathData + gb.fileData, gb.pathData + gb.fileDataT)
+    elimina_otros_indices()
     print('Tabla reducida')
 
+    print('Filtrando y rellenando...')
+    g_col = ''
+    g_df_data = pd.read_csv(gb.pathData + gb.fileDataTrans, sep=';', decimal='.')
+    filtrayrellena()
+    g_df_data.to_csv(gb.pathData + gb.fileDataClean, sep=';', decimal='.', index=False)
+    print('Termina filtrado y rellenado')
