@@ -34,7 +34,7 @@ def crea_plot(Indice, Var = False, DT = []):
     df_data.iplot(kind='line', xTitle='Year', yTitle=Indice)
 
 
-if __name__ == '__main__':
+def graphics():
     cf.set_config_file(sharing='public', theme='white', offline=True)
     setattr(plotly.offline, "__PLOTLY_OFFLINE_INITIALIZED", True)
 
@@ -44,3 +44,6 @@ if __name__ == '__main__':
     DT = []
     for indice in indices:
         crea_plot(indice, DT = DT)
+
+if __name__ == '__main__':
+    graphics()

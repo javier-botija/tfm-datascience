@@ -30,8 +30,12 @@ def crea_plot():
     df_data.iplot(kind='line', xTitle='Year', yTitle='value')
 
 
-if __name__ == '__main__':
+def graphic11():
     cf.set_config_file(sharing='public', theme='white', offline=True)
     setattr(plotly.offline, "__PLOTLY_OFFLINE_INITIALIZED", True)
 
     crea_plot()
+
+
+if __name__ == '__main__':
+    graphic11()

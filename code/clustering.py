@@ -27,7 +27,10 @@ def elimina_ceros(df_data):
 
 def genera_plot_hist(df_data):
     df_data.hist()
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGhist)
 
 
 def genera_boxplot(df_data_vars):
@@ -35,7 +38,10 @@ def genera_boxplot(df_data_vars):
     X = scaler.fit_transform(df_data_vars)
     plt.boxplot(X, vert=True, patch_artist=False);
     plt.xticks([1,2,3,4,5,6,7],df_data_vars.columns,rotation=10, fontsize=6)
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGboxplot)
 
 
 def genera_plot_norma(df_data_vars):
@@ -54,7 +60,10 @@ def genera_plot_norma(df_data_vars):
             ncol = 0
             nrow = nrow + 1
     plt.tight_layout()
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGplotNorma)
 
 
 def tabla_correlaciones(df_data_vars):
@@ -79,7 +88,10 @@ def tabla_correlaciones(df_data_vars):
         horizontalalignment = 'right',
     )
     ax.tick_params(labelsize = 10)
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGheatmap)
 
 def genera_pairplot(df_data_vars):
     labels = dame_codigos(gb.indexes)
@@ -92,7 +104,10 @@ def genera_pairplot(df_data_vars):
         ax.set_ylabel(lbl, rotation = 90)
 
 
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGpaitplot)
 
 
 def genera_obtienek(df_data_or):
@@ -122,7 +137,10 @@ def genera_obtienek(df_data_or):
     plt.xlabel('Número de clústeres')
     plt.ylabel('valor')
     plt.title('Análisis de silueta')
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGk)
 
 
 def genera_kmeans(df_data_or, clusters):
@@ -138,8 +156,10 @@ def genera_kmeans(df_data_or, clusters):
 
 def genera_hist_cluster(df_data):
     df_data.hist(hue='cluster', x=gb.indexes)
-    plt.show()
-
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGhistcluster)
 def genera_plot_cluster(df_data):
     fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(25, 5))
     nrow=0
@@ -156,7 +176,10 @@ def genera_plot_cluster(df_data):
             ncol = 0
             nrow = nrow + 1
     plt.tight_layout()
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGplotcluster)
 
 def genera_boxplot_clusters(df_data):
     clusters = df_data.cluster.unique()
@@ -185,26 +208,31 @@ def genera_boxplot_clusters(df_data):
             ncol = 0
             nrow = nrow + 1
     plt.tight_layout()
-    plt.show()
+    if gb.debug:
+        plt.show()
+    else:
+        plt.savefig(gb.pathGraphics + gb.fileGboxplotcluster)
 
 
-if __name__ == '__main__':
+def clustering():
     plt.style.use('ggplot')
     warnings.filterwarnings('ignore')
     df_data = pd.read_csv(gb.pathData + gb.fileDataClean, sep=';', decimal='.')
     df_data = elimina_ceros(df_data)
     df_data_vars = df_data[gb.indexes]
-    #genera_plot_hist(df_data_vars)
-    #genera_boxplot(df_data_vars)
-    #genera_plot_norma(df_data_vars)
-    #tabla_correlaciones(df_data_vars)
-    #genera_pairplot(df_data_vars)
-    #genera_obtienek(df_data)
-    #genera_kmeans(df_data, 3)
-    #genera_kmeans(df_data, 4)
+    genera_plot_hist(df_data_vars)
+    genera_boxplot(df_data_vars)
+    genera_plot_norma(df_data_vars)
+    tabla_correlaciones(df_data_vars)
+    genera_pairplot(df_data_vars)
+    genera_obtienek(df_data)
+    genera_kmeans(df_data, 3)
+    genera_kmeans(df_data, 4)
 
-    #df_data = pd.read_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(3)), sep=';', decimal='.')
-    #genera_boxplot_clusters(df_data)
+    df_data = pd.read_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(3)), sep=';', decimal='.')
+    genera_boxplot_clusters(df_data)
     df_data = pd.read_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(4)), sep=';', decimal='.')
     genera_boxplot_clusters(df_data)
 
+if __name__ == '__main__':
+    clustering()

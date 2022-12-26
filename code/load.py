@@ -271,7 +271,7 @@ def dame_valor_prox(mrow):
                 valor = 0
     return valor
 
-def filtrayrellena():
+def filtra_rellena():
     global g_df_data
     global g_col
 
@@ -281,35 +281,38 @@ def filtrayrellena():
         g_col = col
         g_df_data[g_col] = g_df_data.apply(dame_valor_prox, axis=1)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    #df_dest = pd.DataFrame(columns=['DT', 'DTBA', 'Indicator', 'Year', 'Value'])
+
+def load():
+    global df_dest
+    global g_df_data
+    global g_col
+    df_dest = pd.DataFrame(columns=['DT', 'DTBA', 'Indicator', 'Year', 'Value'])
 
     print('Cargando índices...')
-#    recorre_ficheros_indices()
+    recorre_ficheros_indices()
     print('Índices finalizado')
 
     print('Cargando econs...')
-#    recorre_ficheros_econ()
+    recorre_ficheros_econ()
     print('Econ finalizado')
 
     print('Cargando Airbnb...')
-#    recorre_ficheros_airbnb()
+    recorre_ficheros_airbnb()
     print('Airbnb finalizado')
 
     print('Cargando Pisos Turísticos...')
-#    recorre_ficheros_pisos_turisticos()
+    recorre_ficheros_pisos_turisticos()
     print('Pisos Turísticos finalizado')
 
     print('Cargando Renta...')
-#    recorre_ficheros_renta()
+    recorre_ficheros_renta()
     print('Renta finalizado')
 
     print('Cargando Alquileres...')
-#    recorre_ficheros_alquileres()
+    recorre_ficheros_alquileres()
     print('Alquileres finalizado')
 
-#    df_dest.to_csv(gb.pathData + gb.fileDataRaw, sep=';', index=False)
+    df_dest.to_csv(gb.pathData + gb.fileDataRaw, sep=';', index=False)
 
     print('Creando tabla resumen...')
     crea_tabla_resumen()
@@ -322,6 +325,9 @@ if __name__ == '__main__':
     print('Filtrando y rellenando...')
     g_col = ''
     g_df_data = pd.read_csv(gb.pathData + gb.fileDataTrans, sep=';', decimal='.')
-    filtrayrellena()
+    filtra_rellena()
     g_df_data.to_csv(gb.pathData + gb.fileDataClean, sep=';', decimal='.', index=False)
     print('Termina filtrado y rellenado')
+
+if __name__ == '__main__':
+    load()
