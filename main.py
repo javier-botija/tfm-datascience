@@ -20,6 +20,8 @@ if __name__ == '__main__':
 
     if args.verbose:
         gb.debug = True
+    else:
+        gb.debug = False
     if args.load:
         load.load()
     if args.graphics:

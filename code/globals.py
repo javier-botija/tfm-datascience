@@ -43,4 +43,4 @@ indexes = ['037 Índice de aloctonía estatal',
            '503 Alquiler medio mensual €/m2'
            ]
 
-debug = False
+debug = True
