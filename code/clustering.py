@@ -2,11 +2,12 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, SpectralClustering
 from sklearn.metrics import silhouette_score
 from sklearn.preprocessing import MinMaxScaler
 import warnings
 import globals as gb
+import os
 
 
 def dame_codigos(lista):
@@ -14,6 +15,73 @@ def dame_codigos(lista):
     for val in range(len(lista)):
         nlista.append(lista[val][0:3])
     return nlista
+
+def dame_cluster_ord(mrow):
+    global g_cluster
+    if g_cluster == 1:
+        if mrow['cluster'] == 0:
+            cl = 0
+        elif mrow['cluster'] == 1:
+            cl = 2
+        elif mrow['cluster'] == 2:
+            cl = 1
+        else:
+            cl = 3
+    elif g_cluster == 2:
+        if mrow['cluster'] == 0:
+            cl = 1
+        elif mrow['cluster'] == 1:
+            cl = 2
+        elif mrow['cluster'] == 2:
+            cl = 0
+        else:
+            cl = 3
+    elif g_cluster == 3:
+        if mrow['cluster'] == 0:
+            cl = 0
+        elif mrow['cluster'] == 1:
+            cl = 2
+        elif mrow['cluster'] == 2:
+            cl = 3
+        else:
+            cl = 1
+    elif g_cluster == 4:
+        if mrow['cluster'] == 0:
+            cl = 1
+        elif mrow['cluster'] == 1 :
+            cl = 0
+        elif mrow['cluster'] == 2:
+            cl = 2
+        else:
+            cl = 3
+    elif g_cluster == 5:
+        if mrow['cluster'] == 0:
+            cl = 0
+        elif mrow['cluster'] == 1:
+            cl = 1
+        elif mrow['cluster'] == 2:
+            cl = 2
+        else:
+            cl = 3
+    elif g_cluster == 6:
+        if mrow['cluster'] == 0:
+            cl = 2
+        elif mrow['cluster'] == 1:
+            cl = 0
+        elif mrow['cluster'] == 2:
+            cl = 1
+        else:
+            cl = 3
+    elif g_cluster == 7:
+        if mrow['cluster'] == 0:
+            cl = 2
+        elif mrow['cluster'] == 1:
+            cl = 1
+        elif mrow['cluster'] == 2:
+            cl = 0
+        else:
+            cl = 3
+    return cl
 
 def dame_label_cluster(mrow):
     return 'Cluster ' + str(mrow['cluster'])
@@ -143,39 +211,104 @@ def genera_obtienek(df_data_or):
     else:
         plt.savefig(gb.pathGraphics + gb.fileGk)
 
+def dame_text(modelo, clusters, exc):
+    txt = modelo
+    if exc != '':
+        txt = txt + '_sin_' + exc
+    txt = txt + '_' + str(clusters)
+    return txt
 
-def genera_kmeans(df_data_or, clusters):
-    df_data_vars=df_data_or[gb.indexes]
+def genera_fichero_Clusters(df_data, modelo, clusters, exc=''):
+    # si no existe tomamos el que se nos pasa como base
+    if not os.path.exists(gb.pathData + gb.fileDataC):
+        df_cluster = df_data.copy()
+    else:
+        df_cluster = pd.read_csv(gb.pathData + gb.fileDataC, sep=';', decimal='.')
+    # eliminamos las columnas base
+    if 'cluster' in df_cluster.columns:
+        df_cluster.drop(columns=['cluster'])
+    if 'namecluster' in df_cluster.columns:
+        df_cluster.drop(columns=['namecluster'])
+
+    name_col = dame_text(modelo, clusters, exc)
+    # las columnas nuevas a generar por si existieran
+    if 'c_' + name_col in df_cluster.columns:
+        df_cluster.drop(columns=['c_' + name_col])
+    if 'n_' + name_col in df_cluster.columns:
+        df_cluster.drop(columns=['n_' + name_col])
+    df_cluster['c_' + name_col] = df_data['cluster'].to_numpy().tolist()
+    df_cluster['n_' + name_col] = df_data['namecluster'].to_numpy().tolist()
+    df_cluster.to_csv(gb.pathData + gb.fileDataC, sep=';', decimal='.', index=False)
+
+
+def genera_kmeans(df_data_or, clusters, exc = ''):
+    global g_cluster
+    indexes = gb.indexes
+    if exc != '':
+        indexes = list(filter(lambda x : exc not in x, indexes))
+    df_data_vars=df_data_or[indexes]
+
     scaler = MinMaxScaler()
     X = scaler.fit_transform(df_data_vars)
     kmeans = KMeans(n_clusters=clusters, random_state=5).fit(X)
     labels = kmeans.predict(X)
     #print(labels)
     df_data_or['cluster'] = labels
-    df_data_or['namecluster'] = df_data_or.apply(dame_label_cluster, axis=1)
-    df_data_or.to_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(clusters)) , sep=';', decimal='.', index=False)
-
-
-def genera_boxplot_clusters(df_data, clusteres):
-    clusters = df_data.cluster.unique()
-    if len(clusters) == 3:
-        labels = ['Riesgo Medio', 'Riesgo Bajo', 'Gentrificado']
-        colors = ['turquoise', 'gold', 'coral']
+    if clusters == 3:
+        if (exc == '') or (exc == '201') or (exc =='474'):
+            g_cluster = 1
+        elif (exc == '042') or (exc == '503'):
+            g_cluster = 5
+        else:
+            g_cluster = 4
     else:
-        labels = ['Riesgo Medio Alto', 'Riesgo Medio Bajo', 'Riesgo Bajo', 'Gentrificado']
-        colors = ['turquoise', 'pink', 'gold', 'coral']
+        if exc == '':
+            g_cluster = 6
+        else:
+            g_cluster = 2
 
+    df_data_or['cluster'] = df_data_or.apply(dame_cluster_ord, axis=1)
+    df_data_or['namecluster'] = df_data_or.apply(dame_label_cluster, axis=1)
+
+    genera_fichero_Clusters(df_data_or, 'KM', clusters, exc)
+
+def genera_SpectralClustering(df_data_or, clusters):
+    global g_cluster
+    df_data_vars = df_data_or[gb.indexes]
+    scaler = MinMaxScaler()
+    X = scaler.fit_transform(df_data_vars)
+    sc = SpectralClustering(n_clusters=clusters, random_state=5).fit(X)
+    labels = sc.labels_
+    #print(labels)
+    df_data_or['cluster'] = labels
+    if clusters == 3:
+        g_cluster = 2
+    else:
+        g_cluster = 3
+    df_data_or['cluster'] = df_data_or.apply(dame_cluster_ord, axis=1)
+    df_data_or['namecluster'] = df_data_or.apply(dame_label_cluster, axis=1)
+
+    genera_fichero_Clusters(df_data_or, 'SC', clusters)
+
+def genera_boxplot_clusters(modelo, clusters, exc=''):
+    df_data = pd.read_csv(gb.pathData + gb.fileDataC, sep=';', decimal='.')
+    # equivalencia de los clusteres con los nombres y colores
+    if (clusters == 3):
+        labels = ['Riesgo Bajo', 'Riesgo Medio', 'Gentrificado']
+        colors = ['green', 'goldenrod', 'tomato']
+    else:
+        labels = ['Riesgo Bajo', 'Riesgo Medio Bajo', 'Riesgo Medio Alto', 'Gentrificado']
+        colors = ['green', 'yellowgreen', 'goldenrod', 'tomato']
+    name_col = dame_text(modelo, clusters, exc)
     fig, axs = plt.subplots(nrows=2, ncols=4, figsize=(25, 10))
     nrow=0
     ncol=0
     for col in gb.indexes:
         data_index = []
-        for cluster in clusters:
-            data_index.append(df_data[df_data['cluster'] == cluster][col])
+        for cluster in range(clusters):
+            data_index.append(df_data[df_data['c_' + name_col] == cluster][col])
         bplot = axs[nrow, ncol].boxplot(data_index, vert=True, patch_artist=True, labels=labels)
         axs[nrow, ncol].set_xlabel(col, fontsize=10)
-
-        #axs[nrow, ncol].xticks(range(1, len(clusters) + 1), labels, rotation=10, fontsize=6)
         for patch, color in zip(bplot['boxes'], colors) :
             patch.set_facecolor(color)
         ncol = ncol + 1
@@ -186,7 +319,8 @@ def genera_boxplot_clusters(df_data, clusteres):
     if gb.debug:
         plt.show()
     else:
-        plt.savefig(gb.pathGraphics + gb.fileGboxplotcluster.replace('cluster','cluster' + '_' + str(clusteres)))
+        plt.savefig(gb.pathGraphics + gb.fileGboxplotcluster.replace('cluster','cluster_' + name_col))
+
 
 
 def clustering():
@@ -196,19 +330,24 @@ def clustering():
     df_data = elimina_ceros(df_data)
     df_data_vars = df_data[gb.indexes]
     gb.debug = False
-    #genera_plot_hist(df_data_vars)
-    #genera_boxplot(df_data_vars)
-    #genera_plot_norma(df_data_vars)
-    #tabla_correlaciones(df_data_vars)
-    #genera_pairplot(df_data_vars)
-    #genera_obtienek(df_data)
-    #genera_kmeans(df_data, 3)
-    #genera_kmeans(df_data, 4)
+    genera_plot_hist(df_data_vars)
+    genera_boxplot(df_data_vars)
+    genera_plot_norma(df_data_vars)
+    tabla_correlaciones(df_data_vars)
+    genera_pairplot(df_data_vars)
+    genera_obtienek(df_data)
+    genera_kmeans(df_data, 3)
+    genera_boxplot_clusters('KM', 3)
+    genera_kmeans(df_data, 4)
+    genera_boxplot_clusters('KM', 4)
+    genera_SpectralClustering(df_data, 3)
+    genera_boxplot_clusters('SC', 3)
+    genera_SpectralClustering(df_data, 4)
+    genera_boxplot_clusters('SC', 4)
 
-    df_data = pd.read_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(3)), sep=';', decimal='.')
-    genera_boxplot_clusters(df_data, 3)
-    df_data = pd.read_csv(gb.pathData + gb.fileDataC.replace('Cluster','Cluster' + '_' + str(4)), sep=';', decimal='.')
-    genera_boxplot_clusters(df_data, 4)
+    for ind in gb.indexes:
+        genera_kmeans(df_data, 3, ind[0:3])
+        genera_boxplot_clusters('KM', 3, ind[0:3])
 
 if __name__ == '__main__':
     clustering()
