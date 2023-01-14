@@ -1,7 +1,7 @@
 # tfm-datascience
 
 |[UOC]
-(https://camo.githubusercontent.com/cfd60245a1fb39e8e19f3ed8c60c16d5bbb3873a74a38259802d88270291c823/687474703a2f2f7777772e756f632e6564752f706f7274616c2f5f7265736f75726365732f636f6d6d6f6e2f696d61746765732f6d617263615f554f432f554f435f4d61737465726272616e642e6a7067)
+(https://github.com/javier-botija/tfm-datascience/tree/main/UOC-logo.png)
 
 Este es el repositorio del código correspondiente al desarrollo del proyecto de final
 de máster en Ciencia de Datos de la UOC con título "Estudio de los factores de gentrificación de los barrios en la ciudad de Valencia".
